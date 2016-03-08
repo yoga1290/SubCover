@@ -1,3 +1,5 @@
+![screenshot](https://github.com/yoga1290/SubCover/blob/v2.0/readme/grid.png)
+
 # :new: features
 
 +	**Portability**
@@ -17,7 +19,6 @@
 +	**Accuracy**
 	+	Profile picture scale is more accurate now :wink:
 
-![screenshot](https://github.com/yoga1290/SubCover/blob/v2.0/readme/grid.png)
 ![screenshot](https://github.com/yoga1290/SubCover/blob/v2.0/readme/facebook.png)
 
 
