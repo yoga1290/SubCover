@@ -2,12 +2,12 @@
 
 Instead of the raw Java Servlet, I'm moving to Spring and a mobile-friendly UI w just 3 buttons:
 
-+	**Browse :camera: **
++	**Browse :camera:**
 	+	Browses the camera roll & files
-+ 	**Adjsct :mag: **
++ 	**Adjsct :mag:**
 	+	:arrow_up_down: to set the zoom factor for the selected image
 	+	:left_right_arrow: to set the zoom factor for the cover/profile-picture
-+	**Save :floopy_disk: **
++	**Save :floppy_disk:**
 	+	Browser redirects to the Data URI or downloads it on Chrome
 
 # TODO:
