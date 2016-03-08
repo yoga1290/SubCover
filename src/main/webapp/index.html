@@ -71,24 +71,24 @@ html
 				'facebook': [{
 					x: 0,
 					y: 0,
-					w: 1340,//w: 765,
-					h: 493//282
+					w: 1340,
+					h: 493
 				},{
-					x: 30,//40,//30,//20,
-					y: 280,//275,//285,//265,//285,//275,//157,
-					w: 245,//250,//260,//144
-					h: 245//250//260
+					x: 30,
+					y: 280,
+					w: 245,
+					h: 245
 				}],
-				'twitter': [{
+				'soundcloud': [{
 					x: 0,
 					y: 0,
-					w: 1425,
-					h: 360
+					w: 1005,
+					h: 210
 				},{
-					x: 133,
-					y: 242,
-					w: 200,
-					h: 200
+					x: 20,
+					y: 16,
+					w: 163,
+					h: 163
 				}]
 			};
 			var mousedown = function(e) {
@@ -144,8 +144,9 @@ html
 					img = new Image();
 					img.onload = function() {
 						initX = initY = x = y = 0;
-						canvas.width = img.width;
-						canvas.height = img.height;
+						canvas.width = document.width;
+						canvas.height = document.height;
+						overlays.zoom = Math.max(document.width, document.height) / 1340;
 						update();
 					};
 					img.src = event.target.result;
@@ -157,24 +158,24 @@ html
 				//context.drawImage(img, 0, 0, img.width, img.height, x, y, img.width*zoomFactor, img.height*zoomFactor);
 				context.drawImage(img, 0, 0, img.width, img.height, x, y, img.width*zoomFactor, img.height*zoomFactor);
 
-				for(var i=0;i<img.width;i++) {
-					if(i%10 === 0) {
-						context.fillStyle = 'red';
-						context.fillRect(0,i,img.width,1);
-						context.fillRect(i,0,1,img.height);
-					}
-					if(i%50 === 0) {
-						context.fillStyle = 'green';
-						context.fillRect(0,i,img.width,1);
-						context.fillRect(i,0,1,img.height);
-					}
-					if(i%100 === 0) {
-						context.fillStyle = 'blue';
-						context.fillRect(0,i,img.width,1);
-						context.fillRect(i,0,1,img.height);
-					}	
-				}
-				console.log(x, y);
+				// for(var i=0;i<img.width;i++) {
+				// 	if(i%10 === 0) {
+				// 		context.fillStyle = 'red';
+				// 		context.fillRect(0,i,img.width,1);
+				// 		context.fillRect(i,0,1,img.height);
+				// 	}
+				// 	if(i%50 === 0) {
+				// 		context.fillStyle = 'green';
+				// 		context.fillRect(0,i,img.width,1);
+				// 		context.fillRect(i,0,1,img.height);
+				// 	}
+				// 	if(i%100 === 0) {
+				// 		context.fillStyle = 'blue';
+				// 		context.fillRect(0,i,img.width,1);
+				// 		context.fillRect(i,0,1,img.height);
+				// 	}	
+				// }
+				// console.log(x, y);
 				var lightColors = ['rgba(209, 232, 244, 0.5)', 'rgba(216,237, 207, 0.5)'];
 				var darkColors = ['rgba(209, 232, 244, 1)', 'rgba(216,237, 207, 1)'];
 				for (var i = 0; i < overlays[selectedLayout].length; i++) {
