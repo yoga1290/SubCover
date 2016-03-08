@@ -1,11 +1,5 @@
 # :new: features
 
-+	**Accuracy**
-	+	Profile picture scale is more accurate now :wink:
-
-![screenshot](https://github.com/yoga1290/SubCover/blob/v2.0/readme/grid.png)
-![screenshot](https://github.com/yoga1290/SubCover/blob/v2.0/readme/facebook.png)
-
 +	**Portability**
 	+	I'm moving to Spring framework instead of raw Java Servlets
 +	**Mobility**
@@ -20,7 +14,11 @@
 			+	:left_right_arrow: to set the zoom factor for the cover/profile-picture
 		+	**Save :floppy_disk:**
 			+	Browser redirects to the Data URI or downloads it on Chrome
++	**Accuracy**
+	+	Profile picture scale is more accurate now :wink:
 
+![screenshot](https://github.com/yoga1290/SubCover/blob/v2.0/readme/grid.png)
+![screenshot](https://github.com/yoga1290/SubCover/blob/v2.0/readme/facebook.png)
 
 
 # TODO:
