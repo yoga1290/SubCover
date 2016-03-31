@@ -144,9 +144,9 @@ html
 					img = new Image();
 					img.onload = function() {
 						initX = initY = x = y = 0;
-						canvas.width = document.width;
-						canvas.height = document.height;
-						overlays.zoom = Math.max(document.width, document.height) / 1340;
+						canvas.width = $(document).width();
+						canvas.height = $(document).height();
+						overlays.zoom = Math.max($(document).width(), $(document).height()) / 1340;
 						update();
 					};
 					img.src = event.target.result;
