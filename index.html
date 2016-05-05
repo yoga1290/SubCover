@@ -1,0 +1,247 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jade/1.3.1/jade.min.js"></script>
+	</head>
+	<body>
+<script type="jade" id="jade">
+html
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible",content="IE=edge")
+		meta(name="viewport",content="width=device-width, initial-scale=1, maximum-scale=1")
+		title SubCover
+		script(src="//code.jquery.com/jquery.js")
+		link(rel="stylesheet",href="https://fonts.googleapis.com/icon?family=Material+Icons")
+		link(rel="stylesheet",href="/css/animate.css")
+		link(rel="stylesheet",href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+		script(src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
+		style.
+			body {
+				overflow: hidden;
+			}
+			i.material-icons {
+				font-size: 42px;
+			}
+			canvas {
+				position: fixed;
+				top: 0px;
+				left: 0px;
+			}
+			canvas#hiddenCanvas{
+				visibility: hidden;
+				overflow: hidden;
+			}
+			input#file {
+				visibility: hidden;
+			}
+			#buttons {
+				position: fixed;
+				bottom:5px;
+				z-index:2;
+			}
+	body(align="center",ng-app="app",ng-controller="ctrl")
+		canvas#hiddenCanvas
+		canvas#CANVAS
+		input#file(type="file",onchange="onFileChange()")
+		#buttons.col-sm-offset-3.col-sm-6
+			.btn-group
+				button#CAMERA.btn.btn-default
+					i.material-icons camera_roll
+				button#ZOOM.btn.btn-default
+					i.material-icons search
+				button#DOWNLOAD.btn.btn-default
+					i.material-icons file_download
+		script.
+			var canvas = document.getElementById('CANVAS');
+			canvas.width = window.width;
+			canvas.height = window.height;
+			var context = canvas.getContext("2d");
+			var initX = 0;
+			var initY = 0;
+			var onZoomMode = false;
+			var zoomFactor = 1.0;
+			var isPressed = false;
+			var selectedLayout = 'facebook';
+			var x = 0, y = 0;
+			var img;
+			var overlays = {
+				zoom: 1,
+				onZoomMode: false,
+				'facebook': [{
+					x: 0,
+					y: 0,
+					w: 1340,
+					h: 493
+				},{
+					x: 30,
+					y: 280,
+					w: 245,
+					h: 245
+				}],
+				'soundcloud': [{
+					x: 0,
+					y: 0,
+					w: 1005,
+					h: 210
+				},{
+					x: 20,
+					y: 16,
+					w: 163,
+					h: 163
+				}]
+			};
+			var mousedown = function(e) {
+				if (!isPressed) {
+					initX = e.pageX;
+					initY = e.pageY;
+					console.log(e);
+				}
+				isPressed = true;
+			};
+			document.addEventListener('mousedown',mousedown);
+			document.addEventListener('touchstart',mousedown);
+
+			var mousemove = function(e) {
+				if(!isPressed) return;
+
+				if(onZoomMode) {
+					var dy = (e.pageY - initY) / img.height;
+					var dx = (e.pageX - initX) / img.height;
+					if (Math.abs(dy)>Math.abs(dx)) {
+						overlays.onZoomMode = false;
+						zoomFactor += dy;
+					}
+					else {
+						overlays.onZoomMode = true;
+						overlays.zoom += dx;
+					}
+				}
+				else {
+					x += e.pageX - initX;
+					y += e.pageY - initY;
+				}
+				update();
+				initX = e.pageX;
+				initY = e.pageY;
+			};
+			document.addEventListener('mousemove', mousemove);
+			document.addEventListener('touchmove', mousemove);
+
+			var mouseup = function(e) {
+				isPressed = false;
+				overlays.onZoomMode = false;
+				onZoomMode = false;
+				$('button#ZOOM').removeClass('btn-success');
+			};
+			document.addEventListener('mouseup',mouseup);
+			document.addEventListener('touchend',mouseup);
+
+
+			var onFileChange = function() {
+				var reader = new FileReader();
+				reader.onload = function(event) {
+					img = new Image();
+					img.onload = function() {
+						initX = initY = x = y = 0;
+						canvas.width = $(document).width();
+						canvas.height = $(document).height();
+						overlays.zoom = Math.max($(document).width(), $(document).height()) / 1340;
+						update();
+					};
+					img.src = event.target.result;
+				};  
+				reader.readAsDataURL(document.getElementById('file').files[0]);
+			};
+			var update = function() {
+				context.clearRect(0,0,canvas.width,canvas.height);
+				//context.drawImage(img, 0, 0, img.width, img.height, x, y, img.width*zoomFactor, img.height*zoomFactor);
+				context.drawImage(img, 0, 0, img.width, img.height, x, y, img.width*zoomFactor, img.height*zoomFactor);
+
+				// for(var i=0;i<img.width;i++) {
+				// 	if(i%10 === 0) {
+				// 		context.fillStyle = 'red';
+				// 		context.fillRect(0,i,img.width,1);
+				// 		context.fillRect(i,0,1,img.height);
+				// 	}
+				// 	if(i%50 === 0) {
+				// 		context.fillStyle = 'green';
+				// 		context.fillRect(0,i,img.width,1);
+				// 		context.fillRect(i,0,1,img.height);
+				// 	}
+				// 	if(i%100 === 0) {
+				// 		context.fillStyle = 'blue';
+				// 		context.fillRect(0,i,img.width,1);
+				// 		context.fillRect(i,0,1,img.height);
+				// 	}	
+				// }
+				// console.log(x, y);
+				var lightColors = ['rgba(209, 232, 244, 0.5)', 'rgba(216,237, 207, 0.5)'];
+				var darkColors = ['rgba(209, 232, 244, 1)', 'rgba(216,237, 207, 1)'];
+				for (var i = 0; i < overlays[selectedLayout].length; i++) {
+					context.fillStyle = overlays.onZoomMode ? darkColors[i%darkColors.length]:lightColors[i%darkColors.length];
+					context.fillRect(
+						overlays[selectedLayout][i].x * overlays.zoom,
+						overlays[selectedLayout][i].y * overlays.zoom,
+						overlays[selectedLayout][i].w * overlays.zoom,
+						overlays[selectedLayout][i].h * overlays.zoom);
+				}
+			};
+
+			// ACTIONS:
+			$(function() {
+				$('button#DOWNLOAD').click(function() {
+					if(overlays[selectedLayout]<=0) return;
+					var overlay = overlays[selectedLayout].pop();
+
+					var canvas = document.getElementById('hiddenCanvas');
+					var context = canvas.getContext("2d");
+					canvas.width = overlay.w * overlays.zoom / zoomFactor; //overlay.w / overlays.zoom;
+					canvas.height = overlay.h * overlays.zoom / zoomFactor;//overlay.h / overlays.zoom;
+					context.clearRect(0,0,canvas.width,canvas.height);
+					//TODO
+					var sx = (x * -1 + overlay.x * overlays.zoom) / zoomFactor;
+					var sy = (y * -1 + overlay.y * overlays.zoom) / zoomFactor;
+					
+					var w = Math.min( overlay.w * overlays.zoom / zoomFactor, img.width / zoomFactor - sx);
+					var h = Math.min( overlay.h * overlays.zoom / zoomFactor, img.height / zoomFactor - sy);
+					context.drawImage(img,
+							sx,sy,w,h,
+							canvas.width - w,
+							canvas.height - h,
+							canvas.width,
+							canvas.height);
+					var data = canvas.toDataURL();
+					var link = document.createElement('a');
+					// chrome supports filename
+					link.download = 'image.' + data.split(';')[0].split('/')[1];
+					link.href = data;
+					link.target = '_blank';
+					link.click();
+					update();
+				});
+				$('button#ZOOM').click(function() {
+					onZoomMode = true;
+					overlays.onZoomMode = false;
+					update();
+					$(this).addClass('btn-success');
+				});
+				$('button#CAMERA').click(function() {
+					$('#file').click();
+				});
+			});
+</script>
+<script>
+window.onload=function(){
+
+		document.write(
+			jade.render(
+				document.getElementById('jade').innerHTML,
+				{pretty:'\t'}
+			)
+		);
+		//AngularJS DOES NOT WORK W/OUT THIS:
+		document.close();
+};
+</script>
+</body></html>
